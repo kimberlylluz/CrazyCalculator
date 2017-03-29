@@ -13,13 +13,15 @@ public class Stack{
 	}
 	
 	public Object pop() throws Exception{
-		for (int i = 0; i < queue.size() - 1;i++ )
+		for (int i = 0; i < queue.pseudoArray.size() - 1;i++ )
 		{
 			queue.enqueue(queue.dequeue ());
 			queue.display(2);
+			queue.display(2);
 		}
         
-		queue.display(3);
+		queue.display(2);
+        queue.display(3);
         return queue.dequeue();
 	}	   
 	  
