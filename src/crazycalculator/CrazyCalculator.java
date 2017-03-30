@@ -154,8 +154,9 @@ public class CrazyCalculator extends Thread{
 					}else if (prec <= precedence) {
 						stack.push(opTop);
 						break;
-					}else {
-						postfixString += opTop + " ";
+					}else if(prec > precedence ){
+						postfix += opTop + " ";
+						break;
 					}
 				}
 				stack.push(opThis);

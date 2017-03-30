@@ -40,6 +40,7 @@ public class Main extends JFrame implements ActionListener{
 		for(int i=0; i<10; i++){
 		    stackTField[i] = new JTextField();
 		    stackTField[i].setEditable(false);
+		    stackTField[i].setVisible(false);
 		    stackTField[i].setFont(font);
 		    stackTField[i].setBounds(170, 180 + 25*i, 50, 25);
 		    add(stackTField[i]);
@@ -63,6 +64,7 @@ public class Main extends JFrame implements ActionListener{
 		for(int i=0; i<10; i++){
 			queueTField[i] = new JTextField();
 			queueTField[i].setEditable(false);
+			queueTField[i].setVisible(false);
 			queueTField[i].setBounds(270, 180 + 25*i, 50, 25);
 			queueTField[i].setFont(font);
 		    add(queueTField[i]);

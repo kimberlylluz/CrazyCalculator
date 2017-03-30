@@ -8,19 +8,18 @@ public class Stack{
 	}
 	  
 	public void push(Object data) throws Exception{
-		queue.enqueue(data);
-		queue.display(1);
+		queue.enqueue1(data);
 	}
 	
 	public Object pop() throws Exception{
-		for (int i = 0; i < queue.size() - 1;i++ )
+		for (int i = 0; i < queue.pseudoArray.size() - 1;i++ )
 		{
 			queue.enqueue(queue.dequeue ());
-			queue.display(2);
 		}
-        
+		
+		Object temp = queue.dequeue();
 		queue.display(3);
-        return queue.dequeue();
+        return temp;
 	}	   
 	  
 	public Object peek() throws Exception{
