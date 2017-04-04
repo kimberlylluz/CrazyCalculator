@@ -1,123 +1,74 @@
 package crazycalculator;
 
 import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import javax.swing.*; 
 
-public class Main extends JFrame implements ActionListener{
-	private JTextField input;
-	public static JTextField output, result;
-	private JLabel infixLabel, postfixLabel, answerLabel, queueLabel, stackLabel;
-	public static JLabel parse, evaluate;
-	public static JTextField[] stackTField, queueTField;
-	Font font = new Font("Century Gothic", Font.BOLD, 12);
+public class Main extends JFrame{
+	private static Main instance;
+	public final Instruction instructionPanel;
+	public final Input inputPanel;
+	public final Display1 display1Panel;
+	public final Display2 display2Panel;
+	private final JPanel jpanel;
+	private final CardLayout layout;
+	
+	public Main(){
+		setUndecorated(true);
+        setLayout(null);
+        setSize(906, 500);
+        setLocationRelativeTo(null);
+        setResizable(false);
+		
+		instructionPanel = new Instruction(this);
+		instructionPanel.setFocusable(false);
+		instructionPanel.setOpaque(false);
+		
+		inputPanel = new Input(this);
+		inputPanel.setFocusable(false);
+		inputPanel.setOpaque(false);
+		
+		display1Panel = new Display1(this);
+		display1Panel.setFocusable(false);
+		display1Panel.setOpaque(false);
 
-	public Main() {
-		setLayout(null);
-		setBackground(Color.WHITE);
+		display2Panel = new Display2(this);
+		display2Panel.setFocusable(false);
+		display2Panel.setOpaque(false);
 		
-		infixLabel = new JLabel("INPUT:");
-		infixLabel.setBounds(90, 20, 50, 25);
-		infixLabel.setFont(font);
-		add(infixLabel);
+		layout = new CardLayout();
 		
-		input = new JTextField(50);
-		input.setBounds(170, 20, 200, 25);
-		input.setFont(font);
-		add(input);
+		jpanel = new JPanel();
+        jpanel.setLocation(0,0);
+		jpanel.setSize(906,500);
+		jpanel.setLayout(layout);
 		
-		stackTField = new JTextField[10];
-		queueTField = new JTextField[10];
+		jpanel.add(instructionPanel, "Instruction");
+		jpanel.add(inputPanel, "Input");
+		jpanel.add(display1Panel, "Display1");
+		jpanel.add(display2Panel, "Display2");
+		add(jpanel);
 		
-		input.addKeyListener(new KeyAdapter(){
-			public void keyTyped(KeyEvent e){
-				char ch = e.getKeyChar();
-				if(!isNumber(ch)  && !isOperator(ch) )
-					e.consume();
-			}
-		});
-		
-		for(int i=0; i<10; i++){
-		    stackTField[i] = new JTextField();
-		    stackTField[i].setEditable(false);
-		    stackTField[i].setFont(font);
-		    stackTField[i].setBounds(170, 180 + 25*i, 50, 25);
-		    add(stackTField[i]);
-		}
-		
-		stackLabel = new JLabel(" STACK");
-		stackLabel.setBounds(170, 160, 50, 25);
-		stackLabel.setFont(font);
-		add(stackLabel);
-		
-		parse = new JLabel("");
-		parse.setFont(font);
-		parse.setBounds(225, 45, 150, 25);
-		add(parse);
-		
-		evaluate = new JLabel();
-		evaluate.setFont(font);
-		evaluate.setBounds(225, 95, 70, 25);
-		add(evaluate);
-		
-		for(int i=0; i<10; i++){
-			queueTField[i] = new JTextField();
-			queueTField[i].setEditable(false);
-			queueTField[i].setBounds(270, 180 + 25*i, 50, 25);
-			queueTField[i].setFont(font);
-		    add(queueTField[i]);
-		}
-		
-		queueLabel = new JLabel(" QUEUE");
-		queueLabel.setFont(font);
-		queueLabel.setBounds(270, 160, 70, 25);
-		add(queueLabel);
-		
-		postfixLabel = new JLabel("POSTFIX:");
-		postfixLabel.setFont(font);
-		postfixLabel.setBounds(90, 70, 80, 25);
-		add(postfixLabel);
-		
-		output = new JTextField(10);
-		output.setFont(font);
-		output.setBounds(170, 70, 200, 25);
-		output.setEditable(false);
-		add(output);
-		
-		answerLabel =  new JLabel("ANSWER:");
-		answerLabel.setFont(font);
-		answerLabel.setBounds(90, 120 , 80 , 25);
-		add(answerLabel);
-		
-		result = new JTextField(10);
-		result.setFont(font);
-		result.setBounds(170, 120, 200, 25);
-		result.setEditable(false);
-		add(result);
-		input.addActionListener(this);
+		setVisible(true);
 	}
 	
-	public boolean isNumber(char ch){
-		return ch >= '0' && ch <= '9';
-	}
-	
-	public boolean isOperator(char ch){
-		return ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '^' || ch == ' '|| ch == '(' || ch== ')' || ch == '.' ;
-	}
-	
-	public static void main(String[] args) {
-		   Main main = new Main();
-		   main.setSize(500,500);
-		   main.setVisible(true);
-		   main.setResizable(false);
-		   main.setLocationRelativeTo(null);
-		   main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
-	}
+	public static Main getInstance(){
+        if(instance == null)
+            instance = new Main();
+        return instance; 
+    }
 
-	public void actionPerformed(ActionEvent e) {
-		CrazyCalculator calc = new CrazyCalculator(input.getText());
-	    Thread thread = new Thread(calc);
-	    thread.start();
+    public void switchCard(String string){
+		layout.show(jpanel, string);
+    }
+	
+	public static void main(String[] args){
+		Main main = new Main();
+		main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		main.setSize(906, 500);
+		main.setResizable(false);
+		main.setLocationRelativeTo(null);
+		main.setContentPane(main.instructionPanel.bg);
+		main.setVisible(true);
+		main.setLayout(null);
 	}
 }
-
