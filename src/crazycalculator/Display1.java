@@ -56,12 +56,13 @@ public class Display1 extends JPanel{
 		display1Label.add(scroll);
 		
 		commitArea = new JTextArea();
-		commitArea.setBounds(474,124,403,220);
+		commitArea.setBounds(471,124,403,220);
 		commitArea.setEditable(false);
-		commitArea.setOpaque(false);
-		commitArea.setVisible(true);
-		commitArea.setForeground(Color.WHITE);
-		display1Label.add(commitArea);
+		JScrollPane scroll1 = new JScrollPane(commitArea);
+		scroll1.setLocation(471,124);
+		scroll1.setVisible(true);
+		scroll1.setSize(404,220);
+		display1Label.add(scroll1);
 		
 		Handler handler = new Handler();
 		start.addActionListener(handler);
