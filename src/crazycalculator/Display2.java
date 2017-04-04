@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 public class Display2 extends JPanel{
 	private Main main;
 	public static JLabel display2Label;
-	public static JTextField timeTField;
+	public static JTextField timeTField, readTField;
 	public static JTextField[] stackTField, queueTField, arrayTField, llistTField;
 	public static JButton[] stackButton, queueButton, arrayButton, llistButton;
 	private JButton back, close, start;
@@ -22,6 +22,12 @@ public class Display2 extends JPanel{
 		display2Label = new JLabel(icon);
 		display2Label.setLocation(0,0);
 		display2Label.setSize(906,500);
+		
+		readTField = new JTextField();
+		readTField.setLocation(539, 46);
+		readTField.setSize(47, 19);
+		readTField.setEditable(false);
+		display2Label.add(readTField);
 		
 		stackTField = new JTextField[12];
 		queueTField = new JTextField[12];

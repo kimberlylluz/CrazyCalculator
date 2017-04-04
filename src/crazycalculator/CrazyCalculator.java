@@ -23,9 +23,11 @@ public class CrazyCalculator extends Thread{
 		int count = 0;
 			try{
 				Input.postfixTField.setVisible(true);
-				for(int i = 0; i < j + 1; i++){String temp = "";
+				for(int i = 0; i < j + 1; i++){
+				String temp = "", tem = "";
 					for(int j = 0; j < i + 1; j++){
 						temp += string[j] + " ";
+						tem = string[j];
 					}					
 					String str = string[i];
 						
@@ -59,6 +61,8 @@ public class CrazyCalculator extends Thread{
 					}
 					postfixString = strBuilder.toString();
 					Thread.sleep(time);
+					Display1.readTField.setText(tem);
+					Display2.readTField.setText(tem);
 					Display1.displayParsed(temp);
 					if(count != 0){
 						Display1.displayCommitted(postfixString);
@@ -152,7 +156,7 @@ public class CrazyCalculator extends Thread{
 	public void  getResult() throws InterruptedException {
 		int j = 0;
 		String[] array = new String[postfixString.length()];
-		String temp = "";
+		String temp = "", tem = "";
 		
 		Display1.parseArea.setText("");
 		Display1.commitArea.setText("");
@@ -169,8 +173,11 @@ public class CrazyCalculator extends Thread{
 		for (int i = 0; i < j + 1; i++) {
 			for(int k = i; k < i + 1; k++){
 				temp += array[k] + " ";
+				tem = array[k];
 			}					
-			
+
+			Display1.readTField.setText(tem);
+			Display2.readTField.setText(tem);
 	       	Display1.displayParsed(temp);
 			String num = "";
 			String num1 = "";
@@ -224,6 +231,8 @@ public class CrazyCalculator extends Thread{
 			Display2.timeTField.setEditable(true);
 			Display1.timeTField.setText("");
 			Display2.timeTField.setText("");
+			Display1.readTField.setText("");
+			Display2.readTField.setText("");
 			Thread.sleep(time);
 		}catch(Exception ex){
 			ex.printStackTrace();

@@ -10,7 +10,7 @@ public class Display1 extends JPanel{
 	private Main main;
 	public static JLabel display1Label;
 	public static JTextArea parseArea, commitArea;
-	public static JTextField timeTField;
+	public static JTextField timeTField, readTField;
 	private JButton back, close, start;
 	ImageIcon icon = new ImageIcon(getClass().getResource("display1bg.png"));
 	
@@ -26,6 +26,12 @@ public class Display1 extends JPanel{
 		timeTField.setLocation(662, 46);
 		timeTField.setSize(147, 19);
 		display1Label.add(timeTField);
+		
+		readTField = new JTextField();
+		readTField.setLocation(539, 46);
+		readTField.setSize(47, 19);
+		readTField.setEditable(false);
+		display1Label.add(readTField);
 		
 		start = new JButton(new ImageIcon(getClass().getResource("start.png")));
         start.setRolloverIcon(new ImageIcon(getClass().getResource("starthover.png")));
