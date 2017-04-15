@@ -1,53 +1,34 @@
 package crazycalculator;
 
 import java.util.*;
+import java.awt.*;
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class CrazyCalculator extends Thread{
 	String postfix, infixString, postfixString;
 	String[] string;
 	Stack stack;
-	int size;
+	int size, j;
+	public static int time;
 	
-	public CrazyCalculator(String input){
-		infixString = input;
-		size = input.length();
+	public CrazyCalculator(String[] string, int j){
 		stack = new Stack();
-		string = new String[size];
+		this.j = j;
+		this.string = string;
 	}
 	
 	public void run(){
-		boolean run = true;
-		int j = 0;
-			
-		for(int i = 0; i < infixString.length(); i++)
-			string[i] = "";
-
-		
-		for(int k = 0; k < infixString.length(); k++){
-			if (infixString.charAt(k) == ' ')
-				j++;
-			else
-				string[j] += infixString.charAt(k);
-		}
-		
-		for(int i = 0; i < j + 1; i++){
-			if(!isNumeric(string[i]) && !isOperator(string[i]) || string[i].isEmpty()){
-				Main.parse.setText("Wrong input!");
-				run = false;
-				try {
-					//System.out.println("Not runnable");
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				break;
-			}
-		}
-		   
-		
-		if(run == true){
+		int count = 0;
 			try{
+				Input.postfixTField.setVisible(true);
 				for(int i = 0; i < j + 1; i++){
+				String temp = "", tem = "";
+					for(int j = 0; j < i + 1; j++){
+						temp += string[j] + " ";
+						tem = string[j];
+					}					
 					String str = string[i];
 						
 					if (str.equals("(")){
@@ -72,13 +53,6 @@ public class CrazyCalculator extends Thread{
 					else{
 						postfix += str + " ";
 					}
-					Main.result.setText("");
-					Main.parse.setText("Parsing.");
-					Thread.sleep(500);
-					Main.parse.setText("Parsing..");
-					Thread.sleep(500);
-					Main.parse.setText("Parsing...");
-					Thread.sleep(500);
 					
 					char[] ch = postfix.toCharArray();
 					StringBuilder strBuilder = new StringBuilder();
@@ -86,7 +60,15 @@ public class CrazyCalculator extends Thread{
 						   strBuilder.append(ch[l]);
 					}
 					postfixString = strBuilder.toString();
-					Main.output.setText(postfixString);
+					Thread.sleep(time);
+					Display1.readTField.setText(tem);
+					Display2.readTField.setText(tem);
+					Display1.displayParsed(temp);
+					if(count != 0){
+						Display1.displayCommitted(postfixString);
+					}
+					Input.postfixTField.setText(postfixString);
+					count++;
 				}
 				
 				while (!stack.isEmpty()) {
@@ -97,7 +79,8 @@ public class CrazyCalculator extends Thread{
 						   strBuilder.append(ch1[i]);
 					}
 					postfixString = strBuilder.toString();
-					Main.output.setText(postfixString);
+					Display1.displayCommitted(postfixString);
+					Input.postfixTField.setText(postfixString);
 				}
 				
 				char[] ch2 = postfix.toCharArray();
@@ -107,16 +90,17 @@ public class CrazyCalculator extends Thread{
 				}
 				postfixString = strBuilder.toString();
 				
-				Main.output.setText(postfixString);
-				Thread.sleep(500);
-				Main.parse.setText(" ");
-				
+				Input.postfixTField.setText(postfixString);
+				Thread.sleep(time);
+				Input.inputLabel.setIcon(new ImageIcon(getClass().getResource("postfix1bg.png")));
+				Display1.display1Label.setIcon(new ImageIcon(getClass().getResource("display1postfix.png")));
+				Display2.display2Label.setIcon(new ImageIcon(getClass().getResource("postfixbg.png")));
+				Input.answerTField.setVisible(true);
 				getResult();
 			        
 			}catch(Exception ex){
 				ex.printStackTrace();
-			}
-		}		
+			}		
 	}
 	
 	public static boolean isNumeric(String str){  
@@ -151,11 +135,12 @@ public class CrazyCalculator extends Thread{
 					if(opTop.equals("(")) {
 						stack.push(opTop);
 						break;
-					}else if (prec <= precedence) {
+					}else if (prec < precedence) {
 						stack.push(opTop);
 						break;
-					}else {
-						postfixString += opTop + " ";
+					}else if(prec >= precedence ){
+						postfix += opTop + " ";
+						break;
 					}
 				}
 				stack.push(opThis);
@@ -167,7 +152,11 @@ public class CrazyCalculator extends Thread{
 	
 	public void  getResult() throws InterruptedException {
 		int j = 0;
-		String array[] = new String[postfixString.length()];
+		String[] array = new String[postfixString.length()];
+		String temp = "", tem = "";
+		
+		Display1.parseArea.setText("");
+		Display1.commitArea.setText("");
 		
 		for (int i = 0; i < postfixString.length(); i++)
 			array[i] = "";
@@ -179,6 +168,14 @@ public class CrazyCalculator extends Thread{
 		}
 
 		for (int i = 0; i < j + 1; i++) {
+			for(int k = i; k < i + 1; k++){
+				temp += array[k] + " ";
+				tem = array[k];
+			}					
+
+			Display1.readTField.setText(tem);
+			Display2.readTField.setText(tem);
+	       	Display1.displayParsed(temp);
 			String num = "";
 			String num1 = "";
 			double ans = 0;
@@ -215,24 +212,27 @@ public class CrazyCalculator extends Thread{
 								
 	             }else{
 	            	 stack.push(ch);
-		         }
-	            
-	    		
+		         }	
 			}catch(Exception ex){
 				ex.printStackTrace();
 			}
-			Main.evaluate.setText("Evaluating.");
-			Thread.sleep(500);
-			Main.evaluate.setText("Evaluating..");
-			Thread.sleep(500);
-			Main.evaluate.setText("Evaluating...");
-			Thread.sleep(500);
+			
 		}
 		try{
-			Main.result.setText(""+stack.pop());
-			Thread.sleep(500);
-			Main.evaluate.setText("");
-			Thread.sleep(500);
+			Display1.display1Label.setIcon(new ImageIcon(getClass().getResource("display1answer.png")));
+			Display2.display2Label.setIcon(new ImageIcon(getClass().getResource("display2answer.png")));
+			Input.inputLabel.setIcon(new ImageIcon(getClass().getResource("answer1bg.png")));
+			Input.answerTField.setText(""+stack.pop());
+			Input.repeat.setVisible(true);				
+			Display1.timeTField.setEditable(true);
+			Display2.timeTField.setEditable(true);
+			Display1.timeTField.setText("");
+			Display2.timeTField.setText("");
+			Display1.readTField.setText("");
+			Display2.readTField.setText("");
+			Input.display1.setVisible(false);
+			Input.display2.setVisible(false);
+			Thread.sleep(time);
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
